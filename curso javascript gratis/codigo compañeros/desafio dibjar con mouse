@@ -1,0 +1,75 @@
+!DOCTYPE html>
+<html>
+    <head>
+        <metacharset="utf-8" />
+        <title>Eventos</title>
+    </head>
+    <body>
+        <br />
+        <canvasid="area_de_dibujo"width="300"height="300"></canvas>
+        <p>Mueve las flechas del teclado para dibujar</p>
+
+        <scripttype="text/javascript">
+
+            const getById = id => document.getElementById(id); // Función para acortar la forma de obtener por ID.
+
+            const cuadrito = getById('area_de_dibujo'); // Obtener Canvas
+            const papel = cuadrito.getContext('2d'); // Obtener Lienzo
+
+            const dibujarLinea = (color, xi, yi, xf, yf, lienzo) => { // Función para dibujar Lineas
+                lienzo.beginPath();
+                lienzo.strokeStyle = color;
+                lienzo.lineWidth = 3;
+                lienzo.moveTo(xi, yi);
+                lienzo.lineTo(xf, yf);
+                lienzo.stroke();
+                lienzo.closePath();
+            }
+
+            const teclas = { UP: 38, DOWN: 40, LEFT: 37, RIGHT: 39}
+
+            let color = 'blue';
+            let [x, y] = [150, 150];
+            const movimiento = 15;
+
+            dibujarLinea('red', x - 1, y - 1, x + 1, y + 1, papel);
+
+            const dibujarTeclado = (evt) => {
+                switch (evt.keyCode) {
+                    case teclas.UP:
+                        dibujarLinea(color, x, y, x, y - movimiento, papel);
+                        y = y - movimiento;
+                        break;
+                    case teclas.DOWN:
+                        dibujarLinea(color, x, y, x, y + movimiento, papel);
+                        y = y + movimiento;
+                        break;
+                    case teclas.LEFT:
+                        dibujarLinea(color, x - movimiento, y, x, y, papel);
+                        x = x - movimiento;
+                        break;
+                    case teclas.RIGHT:
+                        dibujarLinea(color, x + movimiento, y, x, y, papel);
+                        x = x + movimiento;
+                        break;
+                }
+            }
+
+            let moviendo = false;
+            const dibujarMouse = (evt) => {
+                if (!moviendo) return;
+
+                const x = evt.offsetX;
+                const y = evt.offsetY;
+                dibujarLinea(color, x - 1, y - 1, x + 1, y + 1, papel);
+            }
+
+            document.addEventListener('keyup', dibujarTeclado);
+            cuadrito.addEventListener('mousedown', () => moviendo = true);
+            cuadrito.addEventListener('mouseup', () => moviendo = false);
+            cuadrito.addEventListener('mousemove', dibujarMouse);
+
+        </script>
+
+    </body>
+</html>

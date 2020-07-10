@@ -1,0 +1,6 @@
+<<<<<<< HEAD
+hola ctm como estas ?
+=======
+
+hola ctm como estas ?
+>>>>>>> header
